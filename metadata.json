@@ -1,0 +1,6 @@
+{
+  "name": "OmniSpecs 2026: AI Eyeglasses Matrix & Port Harcourt Import Suite",
+  "description": "Comprehensive 2026 catalog, comparison matrix, Port Harcourt import duty calculator, and AI recommendation suite for Ray-Ban Meta, Display Glasses, Audio AI Glasses, and Big Screen XR headsets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
