@@ -7,14 +7,7 @@ import confetti from 'canvas-confetti';
 const STORAGE_KEY_PAID = 'omnispecs_paid_unlocked_v1';
 
 export default function App() {
-  const [isPaidUnlocked, setIsPaidUnlocked] = useState<boolean>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_PAID);
-      return saved === 'true';
-    } catch {
-      return false;
-    }
-  });
+  const [isPaidUnlocked, setIsPaidUnlocked] = useState<boolean>(false);
 
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
@@ -25,7 +18,11 @@ export default function App() {
   }, [isPaidUnlocked]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white bg-[url('/assets/wallpaper.jpg')] bg-cover bg-center bg-fixed relative">
+      {/* Background dark overlay for legibility */}
+      <div className="absolute inset-0 bg-slate-950/88 pointer-events-none z-0"></div>
+
+      <div className="relative z-10 flex flex-col min-h-screen">
       {/* Top Navbar */}
       <header className="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -110,6 +107,7 @@ export default function App() {
           } catch {}
         }}
       />
+      </div>
     </div>
   );
 }

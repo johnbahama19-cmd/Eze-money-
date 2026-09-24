@@ -128,9 +128,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* User Profile Badge (Ezeugo) */}
           <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-            <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">
-              E
-            </div>
+            <img
+              src="/assets/wallpaper.jpg"
+              alt="Profile"
+              className="w-8 h-8 rounded-full object-cover border border-indigo-500/40 shadow-xs"
+            />
             <div className="hidden lg:block text-left">
               <span className="text-xs font-bold text-slate-900 block leading-tight">
                 {currentRole === 'teacher' ? 'Prof. Ezeugo' : 'Ezeugo'}

@@ -24,6 +24,7 @@ export const PaymentGateModal: React.FC<PaymentGateModalProps> = ({
   const [schoolOrg, setSchoolOrg] = useState('Apex Academy District');
   const [transferRef, setTransferRef] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isPendingVerification, setIsPendingVerification] = useState(false);
   const [isPaidSuccess, setIsPaidSuccess] = useState(false);
 
   const handlePay = (e: React.FormEvent) => {
@@ -32,22 +33,13 @@ export const PaymentGateModal: React.FC<PaymentGateModalProps> = ({
 
     setTimeout(() => {
       setIsProcessing(false);
-      setIsPaidSuccess(true);
-      try {
-        confetti({
-          particleCount: 100,
-          spread: 80,
-          origin: { y: 0.5 },
-        });
-      } catch {
-        // ignore
-      }
+      setIsPendingVerification(true);
+    }, 800);
+  };
 
-      setTimeout(() => {
-        onSuccessPay();
-        onClose();
-      }, 1200);
-    }, 1000);
+  const handleManualConfirm = () => {
+    setIsPaidSuccess(true);
+    // Stays pending verification, does not unlock app automatically
   };
 
   return (
@@ -71,14 +63,43 @@ export const PaymentGateModal: React.FC<PaymentGateModalProps> = ({
 
         {isPaidSuccess ? (
           <div className="p-8 text-center space-y-3">
-            <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-              <Check className="w-8 h-8" />
+            <div className="w-14 h-14 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto">
+              <Lock className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">$100 Payment Confirmed!</h3>
+            <h3 className="text-lg font-bold text-slate-900">$100 Payment Pending Manual Verification</h3>
             <p className="text-xs text-slate-600">
-              Welcome, {userName}! Your full-access class license and 100 automated AI grading power credits
-              have been activated.
+              Welcome, {userName}! Your transfer is currently awaiting manual Moniepoint bank verification. Once verified, all features will unlock.
             </p>
+          </div>
+        ) : isPendingVerification ? (
+          <div className="p-6 text-center space-y-4">
+            <div className="w-12 h-12 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center mx-auto">
+              <Lock className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-slate-900">Moniepoint Transfer Awaiting App Check</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Reference / Sender: <strong className="text-slate-900">{transferRef || 'Standard Transfer'}</strong>
+              </p>
+              <p className="text-[11px] text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-200">
+                Transaction remains pending. Open your Moniepoint app to confirm the ₦150,000 transfer to account <strong>574 771 9665</strong>.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleManualConfirm}
+              className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-colors cursor-pointer"
+            >
+              <Lock className="w-4 h-4" />
+              <span>I Have Checked Moniepoint App - Request Verification</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsPendingVerification(false)}
+              className="text-[11px] text-slate-500 hover:text-slate-800 underline cursor-pointer"
+            >
+              Back to Payment Options
+            </button>
           </div>
         ) : (
           <form onSubmit={handlePay} className="p-6 space-y-5 text-xs">
@@ -266,7 +287,7 @@ export const PaymentGateModal: React.FC<PaymentGateModalProps> = ({
               className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-colors cursor-pointer disabled:opacity-60"
             >
               <Lock className="w-4 h-4" />
-              <span>{isProcessing ? 'Processing Transfer...' : paymentMethod === 'bank' ? 'Confirm Moniepoint Transfer & Unlock' : 'Pay $100 & Unlock Immediate Access'}</span>
+              <span>{isProcessing ? 'Checking Moniepoint Gateway...' : paymentMethod === 'bank' ? 'Submit for Moniepoint App Verification (Pending)' : 'Pay $100 & Unlock Immediate Access'}</span>
             </button>
 
             <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400 text-center">
